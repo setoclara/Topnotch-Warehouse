@@ -223,7 +223,7 @@ export async function applyScan(
   if (!plan) return { ok: false, message: "Unknown mode." };
 
   const revalidateCommon = () => {
-    revalidatePath("/");
+    revalidatePath("/events");
     revalidatePath("/admin");
     revalidatePath("/tournaments");
   };
@@ -446,7 +446,7 @@ export async function signIn(formData: FormData) {
 export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/");
+  redirect("/events");
 }
 
 // Save the signed-in user's display name (used to auto-fill "person responsible").
@@ -479,7 +479,7 @@ export async function deleteTournament(formData: FormData) {
   const { error } = await supabase.from("tournaments").delete().eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/tournaments");
-  revalidatePath("/");
+  revalidatePath("/events");
   redirect("/tournaments");
 }
 
@@ -522,7 +522,7 @@ export async function checkOut(formData: FormData) {
   });
   if (error) fail(error.message);
 
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   if (itemId) revalidatePath(`/items/${itemId}`);
   const tid = formData.get("tournament_id");
@@ -568,7 +568,7 @@ export async function checkOutBin(formData: FormData) {
   const { error } = await supabase.from("checkouts").insert(rows);
   if (error) fail(error.message);
 
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   if (tournamentId) revalidatePath(`/tournaments/${tournamentId}`);
   redirect(
@@ -600,7 +600,7 @@ export async function checkInBin(formData: FormData) {
   if (error) fail(error.message);
 
   const count = updated?.length ?? 0;
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   redirect(
     `/admin?done=${encodeURIComponent(
@@ -620,7 +620,7 @@ export async function checkIn(formData: FormData) {
     .update({ checked_in_at: new Date().toISOString() })
     .eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   const tid = formData.get("tournament_id");
   if (tid) revalidatePath(`/tournaments/${tid}`);
@@ -668,7 +668,7 @@ export async function checkInQuantity(formData: FormData) {
     }
   }
 
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   revalidatePath(`/items/${itemId}`);
 }
@@ -697,7 +697,7 @@ export async function assignLabel(formData: FormData) {
   await bumpQuantityToLabelCount(supabase, itemId);
 
   revalidatePath(`/t/${code}`);
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath(`/items/${itemId}`);
   redirect(`/items/${itemId}`);
 }
@@ -706,7 +706,7 @@ export async function assignLabel(formData: FormData) {
 export async function syncItemQuantityWithLabels(itemId: string) {
   const supabase = await createClient();
   await bumpQuantityToLabelCount(supabase, itemId);
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath(`/items/${itemId}`);
 }
 
@@ -797,7 +797,7 @@ export async function writeOffCheckout(formData: FormData) {
   // Lost units no longer live in any bin — trim the bin counts to match.
   if (!c.checked_in_at && itemId) await reconcileItemBins(supabase, itemId);
 
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   if (itemId) revalidatePath(`/items/${itemId}`);
   const tid = formData.get("tournament_id");
@@ -833,7 +833,7 @@ export async function writeOffStock(formData: FormData) {
     .update({ total_quantity: Math.max((avail?.total_quantity ?? 0) - quantity, 0) })
     .eq("id", itemId);
 
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath(back);
   redirect(`${back}?done=written-off`);
 }
@@ -844,7 +844,7 @@ export async function deleteCheckout(formData: FormData) {
   const id = String(formData.get("checkout_id"));
   const { error } = await supabase.from("checkouts").delete().eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   const itemId = formData.get("item_id");
   if (itemId) revalidatePath(`/items/${itemId}`);
@@ -857,7 +857,7 @@ export async function deleteItem(formData: FormData) {
   const id = String(formData.get("item_id"));
   const { error } = await supabase.from("items").delete().eq("id", id);
   if (error) throw new Error(error.message);
-  revalidatePath("/");
+  revalidatePath("/events");
   redirect("/admin");
 }
 
@@ -992,7 +992,7 @@ export async function loadCheckout(formData: FormData) {
     });
   }
 
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   if (truckId) revalidatePath(`/admin/trucks/${truckId}`);
   if (tournamentId) revalidatePath(`/tournaments/${tournamentId}`);
@@ -1038,7 +1038,7 @@ export async function packCheckout(formData: FormData) {
       status: "staged",
     });
   }
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   if (tournamentId) revalidatePath(`/tournaments/${tournamentId}`);
 }
@@ -1111,7 +1111,7 @@ export async function arriveItemTo(formData: FormData) {
   const truckId = String(formData.get("truck_id") ?? "");
   if (!checkoutId || !destination) return;
   await arriveOne(supabase, checkoutId, destination);
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   revalidatePath("/tournaments");
   if (truckId) revalidatePath(`/admin/trucks/${truckId}`);
@@ -1143,7 +1143,7 @@ export async function arriveTruckTo(formData: FormData) {
       .eq("truck_id", truckId)
       .is("checked_in_at", null);
   }
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   revalidatePath("/tournaments");
   revalidatePath(`/admin/trucks/${truckId}`);
@@ -1230,7 +1230,7 @@ export async function mergeItems(formData: FormData) {
   // Remove the now-empty duplicate records.
   await supabase.from("items").delete().in("id", duplicateIds);
 
-  revalidatePath("/");
+  revalidatePath("/events");
   revalidatePath("/admin");
   revalidatePath("/admin/merge");
   revalidatePath(`/items/${primaryId}`);

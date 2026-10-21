@@ -40,7 +40,10 @@ export default async function BinPage({
 
   return (
     <div className="space-y-5">
-      <Link href="/" className="text-sm text-slate-500 hover:text-slate-900">
+      <Link
+        href="/events"
+        className="text-sm text-slate-500 hover:text-slate-900"
+      >
         ← Back to inventory
       </Link>
 

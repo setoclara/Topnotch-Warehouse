@@ -20,7 +20,7 @@ export default async function NavBar() {
         </Link>
         <div className="flex flex-wrap items-center justify-end gap-1 text-sm">
           <Link
-            href="/"
+            href="/events"
             className="rounded-md px-3 py-1.5 text-slate-600 hover:bg-slate-100"
           >
             Home

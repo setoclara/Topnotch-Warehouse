@@ -1,0 +1,27 @@
+name: Keep Supabase warm
+
+# Free Supabase projects auto-pause after ~7 days with no activity. This visits
+# the live site once a day, which runs a database query and keeps the project
+# awake — so it never pauses while the app is in use.
+
+on:
+  schedule:
+    - cron: "0 12 * * *" # every day at 12:00 UTC
+  workflow_dispatch: {} # also lets you run it by hand from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load the inventory page (exercises the database)
+        run: |
+          set -e
+          url="https://tournament-inventory.vercel.app/"
+          echo "Pinging $url"
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$url")
+          echo "HTTP $code"
+          if [ "$code" != "200" ]; then
+            echo "::error::Site returned $code — the database may be paused or the app may be down."
+            exit 1
+          fi
+          echo "OK — database exercised, staying warm."

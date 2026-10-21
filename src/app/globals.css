@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  /* The UI is designed light-only; keep it (and native form controls)
+     light even when the device is set to dark mode. */
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* ---- Print: 2" x 1.25" QR labels, 4 across on US Letter ---- */
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 0.5in 0.25in;
+  }
+
+  .label-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 2in) !important;
+    gap: 0 !important;
+    justify-content: center;
+  }
+
+  .label-item {
+    width: 2in !important;
+    height: 1.25in !important;
+    box-sizing: border-box;
+    padding: 0.06in !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    gap: 0 !important;
+    overflow: hidden;
+    break-inside: avoid;
+  }
+
+  .label-qr {
+    width: 0.82in !important;
+    height: 0.82in !important;
+  }
+
+  .label-title {
+    font-size: 7pt !important;
+    line-height: 1.1 !important;
+    margin-top: 0.03in !important;
+    max-width: 1.85in;
+  }
+
+  .label-owner {
+    font-size: 4.5pt !important;
+    line-height: 1.1 !important;
+  }
+}

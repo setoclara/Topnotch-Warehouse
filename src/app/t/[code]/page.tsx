@@ -37,7 +37,7 @@ export default async function TagPage({
         <p className="text-sm text-slate-500">
           This code isn&apos;t recognized. It may have been deleted.
         </p>
-        <Link href="/" className="text-sm text-slate-600 underline">
+        <Link href="/events" className="text-sm text-slate-600 underline">
           Go to inventory
         </Link>
       </div>

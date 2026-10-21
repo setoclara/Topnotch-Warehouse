@@ -76,7 +76,10 @@ export default async function ItemDetailPage({
 
   return (
     <div className="space-y-6">
-      <Link href="/" className="text-sm text-slate-500 hover:text-slate-900">
+      <Link
+        href="/events"
+        className="text-sm text-slate-500 hover:text-slate-900"
+      >
         ← Back to inventory
       </Link>
 

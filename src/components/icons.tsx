@@ -120,3 +120,32 @@ export function MergeIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function BoxIcon({ className }: IconProps) {
+  return (
+    <svg {...base} className={className} aria-hidden="true">
+      <path d="M21 8.5 12 3.5 3 8.5v7l9 5 9-5v-7Z" />
+      <path d="m3 8.5 9 5 9-5M12 13.5v7" />
+    </svg>
+  );
+}
+
+export function TennisBallIcon({ className }: IconProps) {
+  return (
+    <svg {...base} className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M5.1 6.2A8.98 8.98 0 0 1 9 12a8.98 8.98 0 0 1-3.9 5.8" />
+      <path d="M18.9 6.2A8.98 8.98 0 0 0 15 12a8.98 8.98 0 0 0 3.9 5.8" />
+    </svg>
+  );
+}
+
+export function PaddleIcon({ className }: IconProps) {
+  return (
+    <svg {...base} className={className} aria-hidden="true">
+      <rect x="3.5" y="2.5" width="11" height="11.5" rx="5.5" />
+      <path d="M7.2 14v4.3a1.8 1.8 0 0 0 3.6 0V14" />
+      <circle cx="18.5" cy="16.5" r="2.5" />
+    </svg>
+  );
+}

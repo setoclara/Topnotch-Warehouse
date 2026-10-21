@@ -31,7 +31,10 @@ export default async function ScanPage() {
 
   return (
     <div className="mx-auto max-w-md space-y-4">
-      <Link href="/" className="text-sm text-slate-500 hover:text-slate-900">
+      <Link
+        href="/events"
+        className="text-sm text-slate-500 hover:text-slate-900"
+      >
         ← Back to inventory
       </Link>
       <h1 className="text-2xl font-bold tracking-tight text-slate-900">

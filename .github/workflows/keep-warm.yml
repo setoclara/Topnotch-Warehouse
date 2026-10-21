@@ -16,7 +16,7 @@ jobs:
       - name: Load the inventory page (exercises the database)
         run: |
           set -e
-          url="https://tournament-inventory.vercel.app/"
+          url="https://tournament-inventory.vercel.app/events"
           echo "Pinging $url"
           code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$url")
           echo "HTTP $code"
